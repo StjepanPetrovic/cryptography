@@ -2,28 +2,28 @@
 
 declare(strict_types=1);
 
+const SYMMETRIC_KEY_FILE = __DIR__ . '/keys/tajni_kljuc.txt';
+
 final class KeyGenerator
 {
-    private string $symmetricKey;
-
     public function __construct()
     {
         $this->generateSymmetricKey();
 
-        $this->saveKeyInFile('tajni_kljuc.txt', $this->symmetricKey);
     }
 
     private function generateSymmetricKey(): void
     {
-        $this->symmetricKey = bin2hex(random_bytes(32));
+        $symmetricKey = bin2hex(random_bytes(32));
 
-        echo 'Symmetric key is generated.' . PHP_EOL;
+        if (!file_put_contents(SYMMETRIC_KEY_FILE, $symmetricKey)) {
+            throw new RuntimeException('Could not save symmetric key in file');
+        }
+
+        echo 'Symmetric key is generated and stored in file.' . PHP_EOL;
     }
 
-    private function saveKeyInFile(string $fileName, string $key): void
     {
-        if (!file_put_contents($fileName, $key)) {
-            throw new RuntimeException('Could not save symmetric key in file');
         }
     }
 }
