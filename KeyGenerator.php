@@ -51,4 +51,15 @@ final class KeyGenerator
 
         echo 'Private key and public key are generated and stored in files.' . PHP_EOL;
     }
+
+    public function getKey(string $file): string
+    {
+        $key = file_get_contents($file);
+
+        if (!$key) {
+            throw new RuntimeException('Could not read key from file.');
+        }
+
+        return $key;
+    }
 }
