@@ -1,3 +1,11 @@
+<?php
+
+require 'KeyGenerator.php';
+
+$keyGenerator = new KeyGenerator();
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,6 +26,16 @@
             </label>
             <input type="submit" value="Encrypt">
         </form>
+        <div class="container-recipient-data">
+            <h4>Recipient symmetric key:</h4>
+            <p>
+                <?= $keyGenerator->getKey(KeyGenerator::SYMMETRIC_KEY_FILE) ?>
+            </p>
+            <h4>Recipient public key:</h4>
+            <p>
+                <?= $keyGenerator->getKey(KeyGenerator::PUBLIC_KEY_FILE) ?>
+            </p>
+        </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
