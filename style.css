@@ -11,6 +11,17 @@ body {
     margin: 0 auto;
 }
 
+.container-server {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: start;
+}
+
+.server-data {
+    margin-top: 30px;
+}
+
 .form {
     margin: 30px;
     width: 100%;
@@ -22,6 +33,11 @@ body {
     flex-direction: column;
     justify-content: space-between;
     align-items: flex-start;
+}
+
+.server-send-form {
+    display: flex;
+    width: 100%;
 }
 
 .form label {
