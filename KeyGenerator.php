@@ -31,17 +31,17 @@ final class KeyGenerator
 
     private function generateAsymmetricKeys(): void
     {
-        $asymmetricKey = openssl_pkey_new(self::PRIVATE_KEY_CONFIGURATION);
+        $privateKey = openssl_pkey_new(self::PRIVATE_KEY_CONFIGURATION);
 
-        if (!$asymmetricKey instanceof OpenSSLAsymmetricKey){
+        if (!$privateKey instanceof OpenSSLAsymmetricKey){
             throw new RuntimeException('Could not generate private key.');
         }
 
-        if (!openssl_pkey_export_to_file($asymmetricKey, self::PRIVATE_KEY_FILE)) {
+        if (!openssl_pkey_export_to_file($privateKey, self::PRIVATE_KEY_FILE)) {
             throw new RuntimeException('Could not save private key in file.');
         }
 
-        $publicKey = openssl_pkey_get_details($asymmetricKey)['key'];
+        $publicKey = openssl_pkey_get_details($privateKey)['key'];
 
         if (!file_put_contents(self::PUBLIC_KEY_FILE, $publicKey)) {
             throw new RuntimeException('Could not save public key in file.');

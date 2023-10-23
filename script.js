@@ -4,7 +4,7 @@ $(document).ready(function () {
                 this.style.height = (this.scrollHeight) + 'px';
         });
 
-        $('#encrypt-form').submit(function (event) {
+        $('#encrypt-form').submit(async function (event) {
                 event.preventDefault();
 
                 let file = $('#file_to_encrypt')[0].files[0];
@@ -15,7 +15,20 @@ $(document).ready(function () {
                         alert('Please select a file to encrypt and add encryption key.');
 
                         return;
+                } else if (key.length !== 64) {
+                        alert('Not implemented yet. Please use 64 character key.')
+
+                        return;
                 }
+
+                let cryptoKey = await createSymmetricCryptoKeyFromString(key);
+
+                let iv = window.crypto.getRandomValues(new Uint8Array(12));
+
+                if (key.length === 64) {
+                        encryptFileAndDownload(file, cryptoKey, iv);
+                }
+        });
 
         $('#send-form').submit(function (event) {
                 event.preventDefault();
@@ -25,12 +38,7 @@ $(document).ready(function () {
                 if (file === undefined) {
                         alert('Please select a file to send.');
 
-                const secretKey = hexStringToArrayBuffer(key);
-
-                if (secretKey.byteLength === 32) {
-                        createSymmetricKeyFromStringAndEncryptFile(file, secretKey);
-                } else {
-                        alert('Not implemented yet. Please use 32 byte key.')
+                        return;
                 }
 
                 let formData = new FormData();
@@ -59,42 +67,44 @@ function hexStringToArrayBuffer(hexString) {
         return buffer;
 }
 
-function createSymmetricKeyFromStringAndEncryptFile(file, secretKey) {
+function createSymmetricCryptoKeyFromString(key) {
+        const secretKey = hexStringToArrayBuffer(key);
+
         const symmetricAlgorithmConfiguration = {
                 name: 'AES-GCM',
                 length: 256
         }
 
-        crypto.subtle.importKey(
+        return crypto.subtle.importKey(
             'raw',
             secretKey,
             symmetricAlgorithmConfiguration,
             false,
             ['encrypt', 'decrypt']
-        ).then(function (cryptoKey) {
-                let iv = window.crypto.getRandomValues(new Uint8Array(12));
+        )
+}
 
-                let reader = new FileReader();
+function encryptFileAndDownload(file, cryptoKey, iv) {
+        let reader = new FileReader();
 
-                reader.readAsArrayBuffer(file);
+        reader.readAsArrayBuffer(file);
 
-                reader.onload = function (event) {
-                        file = event.target.result;
+        reader.onload = function (event) {
+                file = event.target.result;
 
-                        crypto.subtle.encrypt(
-                            { name: "AES-GCM", iv },
-                            cryptoKey,
-                            file
-                        ).then(function (encryptedFile) {
-                                let blob = new Blob([encryptedFile], { type: 'application/octet-stream' });
-                                let url = URL.createObjectURL(blob);
-                                let a = document.createElement('a');
-                                a.href = url;
-                                a.download = 'client-encrypted-file.enc';
-                                document.body.appendChild(a);
-                                a.click();
-                                a.remove();
-                        });
-                };
-        });
+                crypto.subtle.encrypt(
+                    { name: "AES-GCM", iv },
+                    cryptoKey,
+                    file
+                ).then(function (encryptedFile) {
+                        let blob = new Blob([encryptedFile], { type: 'application/octet-stream' });
+                        let url = URL.createObjectURL(blob);
+                        let a = document.createElement('a');
+                        a.href = url;
+                        a.download = 'client-encrypted-file.enc';
+                        document.body.appendChild(a);
+                        a.click();
+                        a.remove();
+                });
+        };
 }
