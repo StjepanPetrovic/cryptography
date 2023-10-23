@@ -15,7 +15,7 @@ $keyGenerator = new KeyGenerator();
 </head>
 <body>
     <div class="container">
-        <form id="encrypt-form" class="form" action="" method="post" enctype="multipart/form-data">
+        <form id="encrypt-form" class="form" method="post" enctype="multipart/form-data">
             <label>
                 File to encrypt:
                 <input id="file_to_encrypt" type="file" name="file_to_encrypt">
@@ -38,7 +38,7 @@ $keyGenerator = new KeyGenerator();
                 </p>
             </div>
             <div class="server-send-form">
-                <form id="send-form" class="form" action="" method="post" enctype="multipart/form-data">
+                <form id="send-form" class="form" method="post" enctype="multipart/form-data">
                     <label>
                         File to send:
                         <input id="file_to_send" type="file" name="file_to_send">

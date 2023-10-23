@@ -17,6 +17,14 @@ $(document).ready(function () {
                         return;
                 }
 
+        $('#send-form').submit(function (event) {
+                event.preventDefault();
+
+                let file = $('#file_to_send')[0].files[0];
+
+                if (file === undefined) {
+                        alert('Please select a file to send.');
+
                 const secretKey = hexStringToArrayBuffer(key);
 
                 if (secretKey.byteLength === 32) {
@@ -24,6 +32,21 @@ $(document).ready(function () {
                 } else {
                         alert('Not implemented yet. Please use 32 byte key.')
                 }
+
+                let formData = new FormData();
+
+                formData.append('file', file);
+
+                $.ajax({
+                        url: 'upload.php',
+                        type: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function (data) {
+                                alert(data);
+                        }
+                });
         });
 });
 
