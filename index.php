@@ -1,6 +1,6 @@
 <?php
 
-require 'KeyGenerator.php';
+require 'src/KeyGenerator.php';
 
 $keyGenerator = new KeyGenerator();
 
@@ -11,7 +11,7 @@ $keyGenerator = new KeyGenerator();
 <head>
     <meta charset="UTF-8">
     <title>Cryptography</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="public/style.css">
 </head>
 <body>
     <div class="container">
@@ -49,6 +49,6 @@ $keyGenerator = new KeyGenerator();
         </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="script.js"></script>
+    <script src="public/script.js"></script>
 </body>
 </html>

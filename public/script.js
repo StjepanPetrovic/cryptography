@@ -46,7 +46,7 @@ $(document).ready(function () {
                 formData.append('file', file);
 
                 $.ajax({
-                        url: 'upload.php',
+                        url: '../src/upload.php',
                         type: 'POST',
                         data: formData,
                         processData: false,

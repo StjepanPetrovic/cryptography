@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 final class KeyGenerator
 {
-    public const SYMMETRIC_KEY_FILE = __DIR__ . '/keys/tajni_kljuc.txt';
-    public const PRIVATE_KEY_FILE = __DIR__ . '/keys/privatni_kljuc.txt';
-    public const PUBLIC_KEY_FILE = __DIR__ . '/keys/javni_kljuc.txt';
+    public const SYMMETRIC_KEY_FILE = __DIR__ . '/../keys/tajni_kljuc.txt';
+    public const PRIVATE_KEY_FILE = __DIR__ . '/../keys/privatni_kljuc.txt';
+    public const PUBLIC_KEY_FILE = __DIR__ . '/../keys/javni_kljuc.txt';
 
     private const PRIVATE_KEY_CONFIGURATION = [
         'private_key_bits' => 2048,
