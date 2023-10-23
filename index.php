@@ -15,16 +15,16 @@ $keyGenerator = new KeyGenerator();
 </head>
 <body>
     <div class="container">
-        <form class="form" action="encrypt.php" method="post" enctype="multipart/form-data">
+        <form id="encrypt-form" class="form" action="" method="post" enctype="multipart/form-data">
             <label>
                 File to encrypt:
-                <input type="file" name="file_to_encrypt">
+                <input id="file_to_encrypt" type="file" name="file_to_encrypt">
             </label>
             <label class="label_key">
                 Encryption key:
                 <textarea id="text_area_encryption_key" name="encryption_key" rows="3"></textarea>
             </label>
-            <input type="submit" value="Encrypt">
+            <input type="submit" value="Encrypt and Download file">
         </form>
         <div class="container-recipient-data">
             <h4>Recipient symmetric key:</h4>
@@ -37,15 +37,7 @@ $keyGenerator = new KeyGenerator();
             </p>
         </div>
     </div>
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('#text_area_encryption_key').on('input', function() {
-                this.style.height = 'auto';
-                this.style.height = (this.scrollHeight) + 'px';
-            });
-        });
-    </script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
