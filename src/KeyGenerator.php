@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-final class KeyGenerator
+class KeyGenerator
 {
     public const SYMMETRIC_KEY_FILE = __DIR__ . '/../keys/tajni_kljuc.txt';
     public const PRIVATE_KEY_FILE = __DIR__ . '/../keys/privatni_kljuc.txt';

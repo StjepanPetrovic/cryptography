@@ -1,4 +1,6 @@
 $(document).ready(function () {
+        let aesInitVector = crypto.getRandomValues(new Uint8Array(16));
+
         $('#text_area_encryption_key').on('input', function() {
                 this.style.height = 'auto';
                 this.style.height = (this.scrollHeight) + 'px';
@@ -23,10 +25,8 @@ $(document).ready(function () {
 
                 let cryptoKey = await createSymmetricCryptoKeyFromString(key);
 
-                let iv = window.crypto.getRandomValues(new Uint8Array(12));
-
                 if (key.length === 64) {
-                        encryptFileAndDownload(file, cryptoKey, iv);
+                        encryptFileAndDownload(file, cryptoKey, aesInitVector);
                 }
         });
 
@@ -44,6 +44,8 @@ $(document).ready(function () {
                 let formData = new FormData();
 
                 formData.append('file', file);
+
+                formData.append('iv', buf2hex(aesInitVector));
 
                 $.ajax({
                         url: '../src/upload.php',
@@ -67,19 +69,20 @@ function hexStringToArrayBuffer(hexString) {
         return buffer;
 }
 
-function createSymmetricCryptoKeyFromString(key) {
-        const secretKey = hexStringToArrayBuffer(key);
+function buf2hex(buffer) {
+        return [...new Uint8Array(buffer)]
+            .map(x => x.toString(16).padStart(2, '0'))
+            .join('');
+}
 
-        const symmetricAlgorithmConfiguration = {
-                name: 'AES-GCM',
-                length: 256
-        }
+function createSymmetricCryptoKeyFromString(key) {
+        let secretKey = hexStringToArrayBuffer(key);
 
         return crypto.subtle.importKey(
             'raw',
             secretKey,
-            symmetricAlgorithmConfiguration,
-            false,
+            {name: 'AES-CBC', length: 256},
+            true,
             ['encrypt', 'decrypt']
         )
 }
@@ -87,13 +90,15 @@ function createSymmetricCryptoKeyFromString(key) {
 function encryptFileAndDownload(file, cryptoKey, iv) {
         let reader = new FileReader();
 
+        let fileName = file.name;
+
         reader.readAsArrayBuffer(file);
 
         reader.onload = function (event) {
                 file = event.target.result;
 
                 crypto.subtle.encrypt(
-                    { name: "AES-GCM", iv },
+                    { name: "AES-CBC", iv: iv},
                     cryptoKey,
                     file
                 ).then(function (encryptedFile) {
@@ -101,7 +106,7 @@ function encryptFileAndDownload(file, cryptoKey, iv) {
                         let url = URL.createObjectURL(blob);
                         let a = document.createElement('a');
                         a.href = url;
-                        a.download = 'client-encrypted-file.enc';
+                        a.download = fileName + '.enc';
                         document.body.appendChild(a);
                         a.click();
                         a.remove();

@@ -4,6 +4,28 @@ require 'src/KeyGenerator.php';
 
 $keyGenerator = new KeyGenerator();
 
+if (!file_exists('client_encrypted_files') || !file_exists('client_decrypted_files')) {
+    if ((!mkdir('client_encrypted_files', 0777, true) && !is_dir('client_encrypted_files'))
+        || (!mkdir('client_decrypted_files', 0777, true) && !is_dir('client_decrypted_files'))) {
+        throw new \RuntimeException('Directory "client_encrypted_files" was not created');
+    }
+} else {
+    $encryptedFiles = glob('client_encrypted_files/*');
+    $decryptedFiles = glob('client_decrypted_files/*');
+
+    foreach ($encryptedFiles as $file) {
+        if (is_file($file)) {
+            unlink($file);
+        }
+    }
+
+    foreach ($decryptedFiles as $file) {
+        if (is_file($file)) {
+            unlink($file);
+        }
+    }
+}
+
 ?>
 
 <!DOCTYPE html>
