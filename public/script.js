@@ -17,16 +17,24 @@ $(document).ready(function () {
                         alert('Please select a file to encrypt and add encryption key.');
 
                         return;
-                } else if (key.length !== 64) {
-                        alert('Not implemented yet. Please use 64 character key.')
+                } else if (key.length !== 64 && !(key.startsWith('-----BEGIN PUBLIC KEY-----') && key.endsWith('-----END PUBLIC KEY-----'))) {
+                        alert('Please use (64 bit) symmetric key or (public) asymmetric key.')
 
                         return;
                 }
 
-                let cryptoKey = await createSymmetricCryptoKeyFromString(key);
+                let cryptoKey = null;
 
                 if (key.length === 64) {
-                        encryptFileAndDownload(file, cryptoKey, aesInitVector);
+                        cryptoKey = await createSymmetricCryptoKeyFromString(key);
+
+                        symmetricEncryptFile(file, cryptoKey, aesInitVector);
+                }
+
+                if (key.startsWith('-----BEGIN PUBLIC KEY-----') && key.endsWith('-----END PUBLIC KEY-----')) {
+                        cryptoKey = await createAsymmetricPublicKeyFromPemString(key);
+
+                        asymmetricEncryptFile(file, cryptoKey);
                 }
         });
 
@@ -75,6 +83,17 @@ function buf2hex(buffer) {
             .join('');
 }
 
+function str2ab(str) {
+        const buf = new ArrayBuffer(str.length);
+        const bufView = new Uint8Array(buf);
+
+        for (let i = 0, strLen = str.length; i < strLen; i++) {
+                bufView[i] = str.charCodeAt(i);
+        }
+
+        return buf;
+}
+
 function createSymmetricCryptoKeyFromString(key) {
         let secretKey = hexStringToArrayBuffer(key);
 
@@ -87,7 +106,28 @@ function createSymmetricCryptoKeyFromString(key) {
         )
 }
 
-function encryptFileAndDownload(file, cryptoKey, iv) {
+async function createAsymmetricPublicKeyFromPemString(key) {
+        const pemHeader = "-----BEGIN PUBLIC KEY-----";
+        const pemFooter = "-----END PUBLIC KEY-----";
+        const pemContents = key.substring(
+            pemHeader.length,
+            key.length - pemFooter.length - 1,
+        );
+
+        const binaryDerString = window.atob(pemContents);
+
+        const binaryDer = str2ab(binaryDerString);
+
+        return window.crypto.subtle.importKey(
+            "spki",
+            binaryDer,
+            {name: "RSA-OAEP", hash: "SHA-256" },
+            true,
+            ["encrypt"],
+        );
+}
+
+function symmetricEncryptFile(file, cryptoKey, iv) {
         let reader = new FileReader();
 
         let fileName = file.name;
@@ -102,14 +142,43 @@ function encryptFileAndDownload(file, cryptoKey, iv) {
                     cryptoKey,
                     file
                 ).then(function (encryptedFile) {
-                        let blob = new Blob([encryptedFile], { type: 'application/octet-stream' });
-                        let url = URL.createObjectURL(blob);
-                        let a = document.createElement('a');
-                        a.href = url;
-                        a.download = fileName + '.enc';
-                        document.body.appendChild(a);
-                        a.click();
-                        a.remove();
+                        downloadFile(encryptedFile, fileName);
                 });
         };
+}
+
+function asymmetricEncryptFile(file, cryptoKey) {
+        let reader = new FileReader();
+
+        let fileName = file.name;
+
+        reader.readAsArrayBuffer(file);
+
+        reader.onload = function (event) {
+                file = event.target.result;
+
+                crypto.subtle.encrypt(
+                    { name: "RSA-OAEP" },
+                    cryptoKey,
+                    file
+                ).then(function (encryptedFile) {
+                        downloadFile(encryptedFile, fileName);
+                }).catch(function (error) {
+                        console.error(error);
+                });
+        };
+}
+
+function downloadFile(file, fileName) {
+        let blob = new Blob([file], { type: 'application/octet-stream' });
+        let url = URL.createObjectURL(blob);
+        let a = document.createElement('a');
+
+        a.href = url;
+        a.download = fileName + '.enc';
+
+        document.body.appendChild(a);
+
+        a.click();
+        a.remove();
 }
