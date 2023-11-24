@@ -15,6 +15,8 @@ class KeyGenerator
 
     public function __construct()
     {
+        $this->recreateFolders();
+
         $this->generateSymmetricKey();
 
         $this->generateAsymmetricKeys();
@@ -24,6 +26,8 @@ class KeyGenerator
     {
         $symmetricKey = bin2hex(random_bytes(32));
 
+        touch(self::SYMMETRIC_KEY_FILE);
+
         if (!file_put_contents(self::SYMMETRIC_KEY_FILE, $symmetricKey)) {
             throw new RuntimeException('Could not save symmetric key in file');
         }
@@ -32,6 +36,9 @@ class KeyGenerator
     private function generateAsymmetricKeys(): void
     {
         $privateKey = openssl_pkey_new(self::PRIVATE_KEY_CONFIGURATION);
+
+        touch(self::PRIVATE_KEY_FILE);
+        touch(self::PUBLIC_KEY_FILE);
 
         if (!$privateKey instanceof OpenSSLAsymmetricKey){
             throw new RuntimeException('Could not generate private key.');
@@ -57,5 +64,26 @@ class KeyGenerator
         }
 
         return $key;
+    }
+
+    private function recreateFolders(): void
+    {
+        $directories = ['client_encrypted_files', 'client_decrypted_files', 'keys'];
+
+        foreach ($directories as $directory) {
+            if (!file_exists($directory)) {
+                if (!mkdir($directory, 0777, true) && !is_dir($directory)) {
+                    throw new \RuntimeException("Directory \"{$directory}\" was not created");
+                }
+            } else {
+                $files = glob($directory . "/*");
+
+                foreach ($files as $file) {
+                    if (is_file($file)) {
+                        unlink($file);
+                    }
+                }
+            }
+        }
     }
 }
