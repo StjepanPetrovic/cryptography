@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 final class Decryptor
 {
-    public function decryptFile(string $fileToDecrypt, string $iv): void
+    public function decryptFileAES(string $fileToDecrypt, string $iv): void
     {
         $fileToDecryptPath = '../client_encrypted_files/' . $fileToDecrypt;
 
@@ -22,6 +22,34 @@ final class Decryptor
 
         if (!$decryptedContent) {
             throw new RuntimeException('Could not decrypt file.');
+        }
+
+        $decryptedFilePath = '../client_decrypted_files/' . basename($fileToDecrypt);
+
+        $decryptedFilePath = substr($decryptedFilePath, 0, -4);
+
+        file_put_contents($decryptedFilePath, $decryptedContent);
+    }
+
+    public function decryptFileRSA(string $fileToDecrypt): void
+    {
+        $fileToDecryptPath = '../client_encrypted_files/' . $fileToDecrypt;
+
+        $fileContent = file_get_contents($fileToDecryptPath);
+
+        $privateKey = openssl_pkey_get_private(file_get_contents('../keys/privatni_kljuc.txt'));
+
+        $decryptedContent = '';
+
+        $isDecrypted = openssl_private_decrypt(
+            $fileContent,
+            $decryptedContent,
+            $privateKey,
+            OPENSSL_PKCS1_OAEP_PADDING,
+        );
+
+        if (!$isDecrypted) {
+            throw new RuntimeException('Could not decrypt file.' . PHP_EOL . openssl_error_string());
         }
 
         $decryptedFilePath = '../client_decrypted_files/' . basename($fileToDecrypt);

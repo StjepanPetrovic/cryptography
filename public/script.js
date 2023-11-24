@@ -1,5 +1,5 @@
 $(document).ready(function () {
-        let aesInitVector = crypto.getRandomValues(new Uint8Array(16));
+        let aesInitVector = null;
 
         $('#text_area_encryption_key').on('input', function() {
                 this.style.height = 'auto';
@@ -26,12 +26,16 @@ $(document).ready(function () {
                 let cryptoKey = null;
 
                 if (key.length === 64) {
+                        aesInitVector = crypto.getRandomValues(new Uint8Array(16));
+
                         cryptoKey = await createSymmetricCryptoKeyFromString(key);
 
                         symmetricEncryptFile(file, cryptoKey, aesInitVector);
                 }
 
                 if (key.startsWith('-----BEGIN PUBLIC KEY-----') && key.endsWith('-----END PUBLIC KEY-----')) {
+                        aesInitVector = null;
+
                         cryptoKey = await createAsymmetricPublicKeyFromPemString(key);
 
                         asymmetricEncryptFile(file, cryptoKey);
@@ -53,7 +57,9 @@ $(document).ready(function () {
 
                 formData.append('file', file);
 
-                formData.append('iv', buf2hex(aesInitVector));
+                if (aesInitVector) {
+                        formData.append('iv', buf2hex(aesInitVector));
+                }
 
                 $.ajax({
                         url: '../src/upload.php',
