@@ -121,7 +121,7 @@ async function createAsymmetricPublicKeyFromPemString(key) {
         return window.crypto.subtle.importKey(
             "spki",
             binaryDer,
-            {name: "RSA-OAEP", hash: "SHA-256" },
+            {name: "RSA-OAEP", hash: "SHA-1" },
             true,
             ["encrypt"],
         );

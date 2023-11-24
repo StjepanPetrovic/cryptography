@@ -28,7 +28,7 @@
 
 2. Used for symmetric encryption (JavaScript - WebCrypto):
 
-   - `crypto.subtle.importKey` https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey
+   - `crypto.subtle.importKey` https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey (it is necessary to use SHA-1 as the hash function, because of the padding `OPENSSL_PKCS1_OAEP_PADDING` in PHP OpenSSL decryption function)
    - `crypto.subtle.encrypt` https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/encrypt (it is only possible to encrypt a small amount of data (190 bytes in this case - https://crypto.stackexchange.com/questions/42097/what-is-the-maximum-size-of-the-plaintext-message-for-rsa-oaep, so it is necessary to use a symmetric encryption algorithm to encrypt the data and then encrypt the key with the public key)
 
 
