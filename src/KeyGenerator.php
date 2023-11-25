@@ -68,7 +68,7 @@ class KeyGenerator
 
     private function recreateFolders(): void
     {
-        $directories = ['client_encrypted_files', 'client_decrypted_files', 'client_message_digests','keys'];
+        $directories = ['client_encrypted_files', 'client_decrypted_files', 'client_message_digests', 'client_signed_files', 'keys'];
 
         foreach ($directories as $directory) {
             if (!file_exists($directory)) {

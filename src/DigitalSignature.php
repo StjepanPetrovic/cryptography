@@ -8,7 +8,7 @@ final class DigitalSignature
     {
         $fileToDigestPath = '../client_decrypted_files/' . $fileToDigest;
 
-        $fileContent = file_get_contents($fileToDigestPath);
+        $fileContent = file_get_contents($fileToDigestPath) . "\n\nDigitally signed by server.";
 
         $digest = openssl_digest($fileContent, 'sha256');
 
@@ -19,5 +19,30 @@ final class DigitalSignature
         $digestFilePath = '../client_message_digests/' . $fileToDigest;
 
         file_put_contents($digestFilePath, $digest);
+    }
+
+    public function encryptMessageDigest(string $fileToSign): void
+    {
+        $fileToSignPath = '../client_message_digests/' . $fileToSign;
+
+        $digest = file_get_contents($fileToSignPath);
+
+        $privateKey = openssl_pkey_get_private(file_get_contents('../keys/privatni_kljuc.txt'));
+
+        $signature = '';
+
+        if (!openssl_private_encrypt(
+            $digest,
+            $signature,
+            $privateKey,
+        )) {
+            throw new RuntimeException('Could not sign message digest.' . PHP_EOL . openssl_error_string());
+        }
+
+        $signature = base64_encode($signature);
+
+        $signatureFilePath = '../client_signed_files/' . $fileToSign;
+
+        file_put_contents($signatureFilePath, $signature);
     }
 }

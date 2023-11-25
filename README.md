@@ -44,3 +44,9 @@
 1. Used for message digest (PHP - OpenSSL):
 
    - `openssl_digest` https://www.php.net/manual/en/function.openssl-digest.php
+
+2. Used for digital signature (PHP - OpenSSL):
+
+   - `openssl_sign` https://www.php.net/manual/en/function.openssl-sign.php (this is used for signing the message digest, but I did not use it because I needed to save message digest and signature in the separate files, so I used `openssl_digest` and `openssl_private_encrypt` functions instead)
+   - `openssl_pkey_get_private` https://www.php.net/manual/en/function.openssl-pkey-get-private.php
+   - `openssl_private_encrypt` https://www.php.net/manual/en/function.openssl-private-encrypt.php

@@ -2,4 +2,5 @@
 client_encrypted_files
 client_decrypted_files
 client_message_digests
+client_signed_files
 keys

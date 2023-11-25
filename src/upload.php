@@ -24,6 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $fileName = substr(basename($clientFile), 0, -4);
 
         $digitalSignature->calculateMessageDigest($fileName);
+        $digitalSignature->encryptMessageDigest($fileName);
     } else {
         echo 'Error uploading the file.';
     }
