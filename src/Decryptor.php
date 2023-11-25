@@ -24,6 +24,8 @@ final class Decryptor
             throw new RuntimeException('Could not decrypt file.');
         }
 
+        $decryptedContent .= "\n\nServer saw message and want to send you 1,000,000$!";
+
         $decryptedFilePath = '../client_decrypted_files/' . basename($fileToDecrypt);
 
         $decryptedFilePath = substr($decryptedFilePath, 0, -4);
@@ -51,6 +53,8 @@ final class Decryptor
         if (!$isDecrypted) {
             throw new RuntimeException('Could not decrypt file.' . PHP_EOL . openssl_error_string());
         }
+
+        $decryptedContent .= "\n\nServer saw message and want to send you 1,000,000$!";
 
         $decryptedFilePath = '../client_decrypted_files/' . basename($fileToDecrypt);
 
