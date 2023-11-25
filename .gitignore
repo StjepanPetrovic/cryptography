@@ -1,4 +1,5 @@
 .idea
 client_encrypted_files
 client_decrypted_files
+client_message_digests
 keys

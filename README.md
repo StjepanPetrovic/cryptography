@@ -38,3 +38,9 @@
    - `openssl_pkey_get_private` https://www.php.net/manual/en/function.openssl-pkey-get-private.php
    - `openssl_private_decrypt` https://www.php.net/manual/en/function.openssl-private-decrypt.php
    - `openssl_error_string` https://www.php.net/manual/en/function.openssl-error-string.php
+
+## Digital Signature
+
+1. Used for message digest (PHP - OpenSSL):
+
+   - `openssl_digest` https://www.php.net/manual/en/function.openssl-digest.php

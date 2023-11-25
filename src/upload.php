@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 require 'Decryptor.php';
+require 'DigitalSignature.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $clientFile = '../client_encrypted_files/' . basename($_FILES['file']['name']);
@@ -17,6 +18,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             $decryptor->decryptFileRSA(basename($clientFile));
         }
+
+        $digitalSignature = new DigitalSignature;
+
+        $fileName = substr(basename($clientFile), 0, -4);
+
+        $digitalSignature->calculateMessageDigest($fileName);
     } else {
         echo 'Error uploading the file.';
     }
