@@ -24,7 +24,7 @@ $keyGenerator = new KeyGenerator();
                 Encryption key:
                 <textarea id="text_area_encryption_key" name="encryption_key" rows="3"></textarea>
             </label>
-            <input type="submit" value="Encrypt and Download file">
+            <input type="submit" value="1. step: Encrypt and Download file">
         </form>
         <div class="container-server">
             <div class="server-data">
@@ -37,14 +37,17 @@ $keyGenerator = new KeyGenerator();
                     <?= $keyGenerator->getKey(KeyGenerator::PUBLIC_KEY_FILE) ?>
                 </p>
             </div>
-            <div class="server-send-form">
-                <form id="send-form" class="form" method="post" enctype="multipart/form-data">
-                    <label>
-                        File to send:
-                        <input id="file_to_send" type="file" name="file_to_send">
-                    </label>
-                    <input type="submit" value="Send file to server">
-                </form>
+            <div class="interaction-server-containter">
+                <div class="server-send-form">
+                    <form id="send-form" class="form" method="post" enctype="multipart/form-data">
+                        <label>
+                            File to send:
+                            <input id="file_to_send" type="file" name="file_to_send">
+                        </label>
+                        <input type="submit" value="2. step: Send file to server">
+                    </form>
+                </div>
+                <button class="receive_button" onclick="getFilesFromServer()">3. step: Get response from server</button>
             </div>
         </div>
     </div>

@@ -41,7 +41,7 @@ final class DigitalSignature
 
         $signature = base64_encode($signature);
 
-        $signatureFilePath = '../client_signed_files/' . $fileToSign;
+        $signatureFilePath = '../client_signed_files/signed_' . $fileToSign;
 
         file_put_contents($signatureFilePath, $signature);
     }

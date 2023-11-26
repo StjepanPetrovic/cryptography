@@ -1,3 +1,5 @@
+let lastSentFile = null;
+
 $(document).ready(function () {
         let aesInitVector = null;
 
@@ -62,7 +64,7 @@ $(document).ready(function () {
                 }
 
                 $.ajax({
-                        url: '../src/upload.php',
+                        url: '../src/uploadClient.php',
                         type: 'POST',
                         data: formData,
                         processData: false,
@@ -71,6 +73,9 @@ $(document).ready(function () {
                                 alert(data);
                         }
                 });
+
+                lastSentFile = file.name;
+                lastSentFile = lastSentFile.substring(0, lastSentFile.length - 4);
         });
 });
 
@@ -187,4 +192,32 @@ function downloadFile(file, fileName) {
 
         a.click();
         a.remove();
+}
+
+function getFilesFromServer() {
+        $.ajax({
+                url: '../src/uploadServerZip.php',
+                type: 'GET',
+                data: {
+                        file_name: lastSentFile
+                },
+                xhrFields: {
+                        responseType: 'blob'
+                },
+                success: function (data) {
+                        let url = URL.createObjectURL(data);
+                        let a = document.createElement('a');
+
+                        a.href = url;
+                        a.download = 'serverMessage.zip';
+
+                        document.body.appendChild(a);
+
+                        a.click();
+                        a.remove();
+                },
+                error: function(jqXHR, textStatus, errorThrown){
+                        console.log('AJAX request failed: ', textStatus, errorThrown);
+                }
+        });
 }
