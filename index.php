@@ -21,18 +21,18 @@ $keyGenerator = new KeyGenerator();
                 <input id="file_to_encrypt" type="file" name="file_to_encrypt">
             </label>
             <label class="label_key">
-                Encryption key:
+                Encryption key (find below):
                 <textarea id="text_area_encryption_key" name="encryption_key" rows="3"></textarea>
             </label>
-            <input type="submit" value="1. step: Encrypt and Download file">
+            <input type="submit" value="1. step: Encrypt file (symmetric or asymmetric) before sending it to the recipient">
         </form>
         <div class="container-server">
             <div class="server-data">
-                <h4>Server symmetric key:</h4>
+                <h4>Recipient's symmetric key:</h4>
                 <p>
                     <?= $keyGenerator->getKey(KeyGenerator::SYMMETRIC_KEY_FILE) ?>
                 </p>
-                <h4>Server public key:</h4>
+                <h4>Recipient's public key:</h4>
                 <p>
                     <?= $keyGenerator->getKey(KeyGenerator::PUBLIC_KEY_FILE) ?>
                 </p>
@@ -44,10 +44,25 @@ $keyGenerator = new KeyGenerator();
                             File to send:
                             <input id="file_to_send" type="file" name="file_to_send">
                         </label>
-                        <input type="submit" value="2. step: Send file to server">
+                        <input type="submit" value="2. step: Send file to recipient">
                     </form>
                 </div>
-                <button class="receive_button" onclick="getFilesFromServer()">3. step: Get response from server</button>
+                <button class="receive_button" onclick="getFilesFromServer()">3. step: Get response from recipient</button>
+            </div>
+        </div>
+        <div class="digital-signature-container">
+            <div class="verify-response-container">
+                <form id="verify-response-form" class="form" method="post" enctype="multipart/form-data">
+                    <label>
+                        Original response file:
+                        <input id="original_response_file" type="file" name="original_response_file">
+                    </label>
+                    <label>
+                        Digital signature file:
+                        <input id="digital_signature_file" type="file" name="digital_signature_file">
+                    </label>
+                    <input type="submit" value="4. step: Verify recipient's response">
+                </form>
             </div>
         </div>
     </div>

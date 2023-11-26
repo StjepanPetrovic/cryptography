@@ -111,5 +111,25 @@ h4 {
 }
 
 .interaction-server-containter {
-    padding: 30px;
+    padding-left: 30px;
+    padding-top: 20px;
+}
+
+.digital-signature-container {
+    width: 100%;
+}
+
+.verify-response-container{
+    width: 60%;
+    margin: 0 auto;
+}
+
+.verify-response-container form {
+    margin: 0;
+}
+
+.server-send-form form {
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
 }
