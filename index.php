@@ -61,6 +61,10 @@ $keyGenerator = new KeyGenerator();
                         Digital signature file:
                         <input id="digital_signature_file" type="file" name="digital_signature_file">
                     </label>
+                    <label class="label_key">
+                        Public key (find up):
+                        <textarea id="encryption_key_signature" name="encryption_key_signature" rows="3"></textarea>
+                    </label>
                     <input type="submit" value="4. step: Verify recipient's response">
                 </form>
             </div>

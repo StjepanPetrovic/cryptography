@@ -10,7 +10,7 @@ final class DigitalSignature
 
         $fileContent = file_get_contents($fileToDigestPath);
 
-        $digest = openssl_digest($fileContent, 'sha256');
+        $digest = openssl_digest($fileContent, 'SHA256');
 
         if (!$digest) {
             throw new RuntimeException('Could not calculate message digest.');
@@ -34,7 +34,7 @@ final class DigitalSignature
         if (!openssl_private_encrypt(
             $digest,
             $signature,
-            $privateKey,
+            $privateKey
         )) {
             throw new RuntimeException('Could not sign message digest.' . PHP_EOL . openssl_error_string());
         }
