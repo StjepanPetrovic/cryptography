@@ -8,7 +8,7 @@ final class DigitalSignature
     {
         $fileToDigestPath = '../client_decrypted_files/' . $fileToDigest;
 
-        $fileContent = file_get_contents($fileToDigestPath);
+        $fileContent = trim(file_get_contents($fileToDigestPath));
 
         $digest = openssl_digest($fileContent, 'SHA256');
 
@@ -63,8 +63,6 @@ final class DigitalSignature
                 $publicKey,
             );
         } catch (Exception $e) {
-            echo 'Error decrypting signature.';
-
             return '';
         }
 

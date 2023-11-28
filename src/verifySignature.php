@@ -8,17 +8,14 @@ $fileName = $_GET['file_name'] ?? '';
 
 $digitalSignature = new DigitalSignature;
 
-$hashFromSignature = $digitalSignature->decryptSignature($fileName);
+$digitalSignature->calculateMessageDigest($fileName);
 
-$hashFromFile = trim(file_get_contents('../client_message_digests/' . $fileName));
+$messageDigestFromFile = file_get_contents('../client_message_digests/' . $fileName);
 
-if ($hashFromSignature === null) {
-    echo 'Error decrypting signature.';
-    exit;
-}
+$messageDigestFromSignature = $digitalSignature->decryptSignature($fileName);
 
-if ($hashFromFile === $hashFromSignature) {
-    echo 'Signature is valid.';
+if ($messageDigestFromFile === $messageDigestFromSignature) {
+    echo 'Signature is VALID.';
 } else {
-    echo 'Signature is not valid.';
+    echo 'Attention! Signature is NOT VALID.';
 }
