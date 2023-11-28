@@ -47,22 +47,7 @@ $keyGenerator = new KeyGenerator();
                         <input type="submit" value="2. step: Send file to recipient">
                     </form>
                 </div>
-                <button class="receive_button" onclick="getFilesFromServer()">3. step: Get response from recipient</button>
-            </div>
-        </div>
-        <div class="digital-signature-container">
-            <div class="verify-response-container">
-                <form id="verify-response-form" class="form" method="post" enctype="multipart/form-data">
-                    <label>
-                        Original response file:
-                        <input id="original_response_file" type="file" name="original_response_file">
-                    </label>
-                    <label>
-                        Digital signature file:
-                        <input id="digital_signature_file" type="file" name="digital_signature_file">
-                    </label>
-                    <input type="submit" value="4. step: Verify recipient's response">
-                </form>
+                <button class="verify-signature" onclick="verifySignature()">3. step: Verify signature</button>
             </div>
         </div>
     </div>

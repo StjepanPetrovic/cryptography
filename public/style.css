@@ -91,7 +91,7 @@ h4 {
     margin: 0 0 1px 0;
 }
 
-.receive_button {
+button {
     background: #1e90ff;
     font-weight: 800;
     border: none;
@@ -106,7 +106,7 @@ h4 {
     width: 100%;
 }
 
-.receive_button:hover {
+button:hover {
     background: #1871fb;
 }
 
@@ -120,7 +120,7 @@ h4 {
 }
 
 .verify-response-container{
-    width: 60%;
+    width: 90%;
     margin: 0 auto;
 }
 

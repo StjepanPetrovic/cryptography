@@ -10,7 +10,7 @@ final class DigitalSignature
 
         $fileContent = file_get_contents($fileToDigestPath);
 
-        $digest = openssl_digest($fileContent, 'sha256');
+        $digest = openssl_digest($fileContent, 'SHA256');
 
         if (!$digest) {
             throw new RuntimeException('Could not calculate message digest.');
@@ -44,5 +44,30 @@ final class DigitalSignature
         $signatureFilePath = '../client_signed_files/signed_' . $fileToSign;
 
         file_put_contents($signatureFilePath, $signature);
+    }
+
+    public function decryptSignature(string $fileToDecrypt): string
+    {
+        $fileToDecryptPath = '../client_signed_files/signed_' . $fileToDecrypt;
+
+        $fileContent = file_get_contents($fileToDecryptPath);
+
+        $publicKey = openssl_pkey_get_public(file_get_contents('../keys/javni_kljuc.txt'));
+
+        $decryptedContent = '';
+
+        try {
+            openssl_public_decrypt(
+                base64_decode($fileContent),
+                $decryptedContent,
+                $publicKey,
+            );
+        } catch (Exception $e) {
+            echo 'Error decrypting signature.';
+
+            return '';
+        }
+
+        return $decryptedContent;
     }
 }

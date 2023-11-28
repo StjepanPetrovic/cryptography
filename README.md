@@ -45,8 +45,14 @@
 
    - `openssl_digest` https://www.php.net/manual/en/function.openssl-digest.php
 
-2. Used for digital signature (PHP - OpenSSL):
-
-   - `openssl_sign` https://www.php.net/manual/en/function.openssl-sign.php (this is used for signing the message digest, but I did not use it because I needed to save message digest and signature in the separate files, so I used `openssl_digest` and `openssl_private_encrypt` functions instead)
-   - `openssl_pkey_get_private` https://www.php.net/manual/en/function.openssl-pkey-get-private.php
-   - `openssl_private_encrypt` https://www.php.net/manual/en/function.openssl-private-encrypt.php
+2. Used for digital signature
+   - PHP - OpenSSL
+     - `openssl_sign` https://www.php.net/manual/en/function.openssl-sign.php (this is more efficient to use for signing the message digest, but I did not use it because I needed to save message digest and signature in the separate files, so I used `openssl_digest` and `openssl_private_encrypt` functions instead)
+     - `openssl_pkey_get_private` https://www.php.net/manual/en/function.openssl-pkey-get-private.php
+     - `openssl_private_encrypt` https://www.php.net/manual/en/function.openssl-private-encrypt.php
+     - `openssl_public_decrypt` https://www.php.net/manual/en/function.openssl-public-decrypt.php
+   - JavaScript - WebCrypto (tryed to decrypt or verify on client side, but it did not work, so I did it on server side)
+     - `crypto.subtle.importKey` https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey
+     - `crypto.subtle.verify` https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/verify (this is more efficient to use for verifying the digital signature, but because I did digital signing manually with `openssl_digest` and `openssl_private_encrypt` functions in PHP, so I did verify manually with `crypto.subtle.digest` and `crypto.subtle.decrypt` functions)
+     - `crypto.subtle.digest` https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/digest
+     - `crypto.subtle.decrypt` https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/decrypt

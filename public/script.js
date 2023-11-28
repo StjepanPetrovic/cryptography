@@ -194,30 +194,15 @@ function downloadFile(file, fileName) {
         a.remove();
 }
 
-function getFilesFromServer() {
+function verifySignature() {
         $.ajax({
-                url: '../src/uploadServerZip.php',
+                url: '../src/verifySignature.php',
                 type: 'GET',
                 data: {
                         file_name: lastSentFile
                 },
-                xhrFields: {
-                        responseType: 'blob'
-                },
                 success: function (data) {
-                        let url = URL.createObjectURL(data);
-                        let a = document.createElement('a');
-
-                        a.href = url;
-                        a.download = 'serverMessage.zip';
-
-                        document.body.appendChild(a);
-
-                        a.click();
-                        a.remove();
+                        alert(data);
                 },
-                error: function(jqXHR, textStatus, errorThrown){
-                        console.log('AJAX request failed: ', textStatus, errorThrown);
-                }
         });
 }
