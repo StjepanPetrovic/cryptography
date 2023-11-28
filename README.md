@@ -1,5 +1,27 @@
 # Crypthography
 
+## Setup
+
+1. Install PHP 8.2
+2. Open terminal in the project root directory and run `php -S localhost:8000` command in terminal
+3. Open `http://localhost:8000` in browser
+4. Connect to the Internet because of JQuery
+
+You should see the following screen:
+
+![img.png](main_screen.png)
+
+## Scenario
+
+1. Alice wants to send a file to Bob, but she wants to encrypt the file before sending it to Bob
+2. Bob sends his public key to Alice, and they agree on a symmetric key (showed on the main screen)
+3. In the first form, Alice selects a file, choose the key to use and clicks on the "Encrypt file" button, and she gets an encrypted file made on her client side
+4. In the second form, Alice selects the encrypted file and clicks on the "Send file" button, and she sends the encrypted file to Bob
+5. Bob decrypts the file with his private key or the symmetric key, and he gets the Alice's original file
+6. Bob edits Alice's file and signs it with his private key
+7. Bob sends edited Alice's file and his digital signature to Alice
+8. Alice verifies Bob's digital signature with Bob's public key, and she gets the message that the signature is valid or not to be sure that the file is from Bob and that the file is not changed
+
 ## Symmetric Crypthography (AES cryptography)
 
 1. Used for symmetric key generation (PHP):
@@ -41,17 +63,15 @@
 
 ## Digital Signature
 
-1. Used for message digest (PHP - OpenSSL):
-
-   - `openssl_digest` https://www.php.net/manual/en/function.openssl-digest.php
-
-2. Used for digital signature
+Used for digital signature:
    - PHP - OpenSSL
      - `openssl_sign` https://www.php.net/manual/en/function.openssl-sign.php (this is more efficient to use for signing the message digest, but I did not use it because I needed to save message digest and signature in the separate files, so I used `openssl_digest` and `openssl_private_encrypt` functions instead)
+     - `openssl_digest` https://www.php.net/manual/en/function.openssl-digest.php
      - `openssl_pkey_get_private` https://www.php.net/manual/en/function.openssl-pkey-get-private.php
      - `openssl_private_encrypt` https://www.php.net/manual/en/function.openssl-private-encrypt.php
+     - `openssl_pkey_get_public` https://www.php.net/manual/en/function.openssl-pkey-get-public.php
      - `openssl_public_decrypt` https://www.php.net/manual/en/function.openssl-public-decrypt.php
-   - JavaScript - WebCrypto (tryed to decrypt or verify on client side, but it did not work, so I did it on server side)
+   - JavaScript - WebCrypto (tryed to decrypt or verify on client side, but it did not work, so I did it on the server side)
      - `crypto.subtle.importKey` https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey
      - `crypto.subtle.verify` https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/verify (this is more efficient to use for verifying the digital signature, but because I did digital signing manually with `openssl_digest` and `openssl_private_encrypt` functions in PHP, so I did verify manually with `crypto.subtle.digest` and `crypto.subtle.decrypt` functions)
      - `crypto.subtle.digest` https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/digest
